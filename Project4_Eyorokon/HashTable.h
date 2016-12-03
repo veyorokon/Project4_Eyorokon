@@ -8,18 +8,21 @@ template <class T> class HashTable {
 #define MAXHASH 1000;
 	
 public:
-	vector<vector <T>> table;
+	vector<vector<int>> table; // Stores our data : key, collisions
+	vector<T> data; //Stores our data
 
-
-	HashTable()
+	HashTable<T>::HashTable()
 	{
-		table(MAXHASH, NULL);
+		table.resize(MAXHASH, vector<int>(2, NULL));
+		data.resize(MAXHASH, NULL);
 	}
 
-	~HashTable()
+	HashTable<T>::~HashTable()
 	{
 	}
+
 	bool HashTable<T>::insert(int key, T value, int& collisions) {
+		int index = hash(key);
 
 	}
 
