@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -8,7 +9,7 @@ template <class T> class HashTable {
 #define MAXHASH 1000
 	
 public:
-	vector<vector<int>> table; // Stores our data : key, collisions
+	vector<vector<int>> table; // Stores our data :[0] key, [1] collisions
 	vector<T> data; //Stores our data
 	int size;
 
@@ -36,7 +37,7 @@ public:
 			assign(home, key, value);
 			return true;
 		}
-		index = probe(home);
+		index = probe(home, key);
 		if (index == -1) return false;
 		assign(index, key, value);
 		return true;

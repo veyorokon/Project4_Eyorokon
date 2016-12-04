@@ -6,13 +6,17 @@
 #include "HashTable.h"
 #include <string>
 
-
 using namespace std;
 
 int main()
 {
+	//HashTable<string> t;
 	HashTable<int> t;
-	cout << to_string(t.table[0][1]);
+	int col, row;
+	cout << t.insert(12, 7777 , col) << endl; //Test insert.
+	cout << t.insert(12, 7878, col) << endl;  //Test Duplicate entry
+	row = 12*12; //Quadratic insert
+	cout << "Key: " << t.table[row][0] << ". Value: " << t.data[row] << endl; //Print where it should be
 	system("pause");
     return 0;
 }
