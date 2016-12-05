@@ -7,7 +7,7 @@ using namespace std;
 
 template <class T> class HashTable {
 #define MAXHASH 1000
-	
+#define MAXPRIME 997	
 public:
 	vector<vector<int>> table; // Stores our data :[0] key, [1] collisions
 	vector<T> data; //Stores our data
@@ -34,12 +34,13 @@ public:
 	bool HashTable<T>::insert(int key, T value, int& collisions) {
 		int home = hash(key), index;
 		if (data[home] == NULL) {
-			assign(home, key, value);
+			assign(home, key, value, 0);
 			return true;
 		}
-		index = probe(home, key);
+		collisions += 1;
+		index = probe(home, key, collisions);
 		if (index == -1) return false;
-		assign(index, key, value);
+		assign(index, key, value, collisions);
 		return true;
 	}
 
@@ -60,32 +61,39 @@ public:
 
 	}
 
-	/*Returns the row index to insert key. If the first index hashed is not available,
-	the function will call a probe hash function to probe the table for the next available index.*/
+	/*Quadratic hash returns the row index modded by MAXHASH to insert key.*/
 	int HashTable<T>::hash(int key) {
-		int index = (key * key) % MAXHASH;
-		return index;
+		return(key * key) % MAXHASH;
 	}
 
 	/*Probes the table for the next available slot. Returns the first index found. */
-	int HashTable<T>::probe(int home, int key) {
+	int HashTable<T>::probe(int home, int key, int &collisions) {
 		int jump = 0, index = (jump+home)%MAXHASH;
-		bool duplicate = isDuplicate(key, index);
+		bool duplicate = isDuplicate(key, home);
 		//Some hash function on index. - While - check duplicates (return -1)
-		while (data[home+jump] != NULL && !duplicate) {
-			jump = (10 + home) % MAXHASH;
+		while (data[index] != NULL) { //Loop until we find an open spot
+			if (duplicate) return -1; //if duplicate return 
+			jump = (MAXPRIME-(key % MAXPRIME)); //update the jump value using Double hash
+			cout << "Key: " << key << " jumped by: " << jump << endl;
+			index = (home + jump) % MAXHASH; //update the index to equal jump value + home
+			duplicate = isDuplicate(key, index); //Check for duplicates
+			collisions += 1;
 		}
-		if (duplicate) return -1;
-		return index;
+		return index; //return index
 	}
 
+	/*Checks if the key at the index is equal to a given key and returns approprate bool value.*/
 	bool HashTable<T>::isDuplicate(int key, int index) {
 		if (table[index][0] == key) return true;
 		return false;
 	}
-	void HashTable<T>::assign(int index, int key, T value) {
+
+	/*Assign key and value at index(row) in both table and data vectors.*/
+	void HashTable<T>::assign(int index, int key, T value, int collisions) {
 		data[index] = value;
 		table[index][0] = key;
+		table[index][1] = collisions;
+		size++; 
 	}
 };
 
