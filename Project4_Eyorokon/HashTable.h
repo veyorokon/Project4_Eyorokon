@@ -4,7 +4,6 @@
 #include "Record.h"
 #include <iomanip>
 #include <float.h>
-#include <fstream>
 
 #define MAXHASH 1000
 #define HASHPRIME 769
@@ -40,7 +39,7 @@ public:
 	/* Inserts the key into the table. If the key is a duplicate, then the function
 	returns false. Else the function returns true.*/
 	bool HashTable<T>::insert(int key, T value, int& collisions) {
-		int collides = 0;
+		int collides = 1;
 		int index = (key*key) % MAXHASH; //Quadratic hash
 		collisions = collides;
 		if (table[index].isEmpty()) return create(index, key, value, collisions); //If index is empty - create new record.
@@ -49,7 +48,7 @@ public:
 		while (!table[index].isEmpty()) {
 			if (table[index].getKey() == key) {//Does that index have an equal key?
 				if (!table[index].isTombstone()) {//If so, is it a tombstone?
-					cout << "Duplicate.";
+					//cout << "Duplicate.";
 					collisions = collides;//If it isn't a tombstone, return false;
 					return 0;
 				}
@@ -60,7 +59,7 @@ public:
 			collides++; //update collisions
 		}
 		collisions = collides;
-		cout << index << ". Collisions: "<< collisions << ". Expected: "<< expectedCollisions();
+		//cout << index << ". Collisions: "<< collisions << ". Expected: "<< expectedCollisions();
 		
 		return create(index, key, value, collides);//create the node
 	}
@@ -119,10 +118,6 @@ public:
 		float a = alpha();
 		float collisions = float(1 / (1 - a));
 		collisions = floor(collisions + 0.5);
-		ofstream out;
-		out.open("output.txt", fstream::app);
-		out << a << "  " << collisions <<"\n";
-		out.close();
 		return collisions;
 	}
 
@@ -142,12 +137,6 @@ public:
 	/*Assign key and value at index(row) in both table and data vectors.*/
 	bool HashTable<T>::create(int index, int key, T value, int collisions) {
 		table[index] = Record<T>(key, value);
-
-		ofstream out;
-		out.open("output2.txt", fstream::app);
-		out << alpha() << "  " << collisions << "\n";
-		out.close();
-
 		size++; 
 		return true;
 	}

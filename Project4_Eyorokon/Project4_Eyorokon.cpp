@@ -29,16 +29,8 @@ int main()
 		t.insert(random, random/2, col);
 		cout << endl;
 	}
+
 	//cout << endl << t;
-	/*cout << endl << endl;
-	int val;
-	cout << t.find(666, val);
-	cout << "Value: for 666: " << val << endl;
-	cout << "Removed." << endl;
-	t.remove(666);
-	cout << t.find(666, val);*/
-	/*
-	int a = t.size;
 
 	for (int i = 0; i < 1000; i++) {
 		int random = rand() % 1000 + 0;
@@ -46,10 +38,17 @@ int main()
 		else (cout << "Key: " << random << " not found.");
 		cout << endl;
 	}
-	int b = t.size;
-	*/
-	//cout << t;
-	//cout << "Size before: " << a << ". Size after: " << b << endl;
+
+
+	for (int i = 0; i < 1000; i++) {
+		int random = rand() % 1000 + 0;
+		cout << "Key: " << random << " inserted at: ";
+		t.insert(random, random / 2, col);
+		cout << endl;
+	}
+
+	cout << t;
+	
 	system("pause");
     return 0;
 }
